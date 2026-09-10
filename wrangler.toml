@@ -14,3 +14,8 @@ binding = "ASSETS"
 run_worker_first = true
 html_handling = "auto-trailing-slash"
 not_found_handling = "single-page-application"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "readmd-stats"
+database_id = "91b94a41-be29-4b49-b150-8fca0a00f77e"

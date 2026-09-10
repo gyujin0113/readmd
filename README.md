@@ -40,3 +40,13 @@ npx wrangler deploy
 ## 라이선스
 
 [MIT](LICENSE) © 2026 주식회사 쓰리앤디
+
+## 방문 통계
+
+외부 분석 스크립트 없이, Worker가 HTML 요청마다 D1(`readmd-stats`)에 익명 기록을 남깁니다.
+저장하는 것: 시각, 경로, 유입 출처 도메인, 국가, 기기 종류, 날짜별 익명 해시(IP·UA·날짜를 해시한 값, 원본 저장 안 함). 쿠키를 쓰지 않습니다.
+
+```bash
+scripts/stats.sh        # 최근 7일
+scripts/stats.sh 30     # 최근 30일
+```
