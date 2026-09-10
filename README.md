@@ -27,7 +27,7 @@ Claude, ChatGPT 같은 AI가 만들어 주는 `.md` 파일을 VS Code 없이 편
 
 ## 배포
 
-Cloudflare Workers 정적 자산(Static Assets) 호스팅입니다.
+Cloudflare Workers 정적 자산(Static Assets) 호스팅입니다. `src/worker.js`는 http→https, www→apex 리디렉션과 HSTS 헤더만 담당합니다.
 
 ```bash
 npx wrangler deploy
