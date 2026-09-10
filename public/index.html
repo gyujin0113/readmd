@@ -3,25 +3,25 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ReadMD - md 파일 뷰어, 마크다운 뷰어</title>
-<meta name="description" content="Claude, ChatGPT가 만들어 준 .md 파일을 설치 없이 브라우저에서 바로 읽고 고치는 무료 마크다운 뷰어. 파일은 서버로 전송되지 않습니다.">
-<meta name="keywords" content="md 파일 뷰어, 마크다운 뷰어, md 파일 열기, markdown viewer, md viewer, 마크다운 편집기, ChatGPT md 파일, 클로드 md 파일">
+<title>MD 뷰어 · 마크다운 리더 - 파일을 드래그해서 바로 읽기 | ReadMD</title>
+<meta name="description" content="md 파일을 창에 드래그하면 바로 읽힙니다. 설치·가입 없음, 서버 전송 없음. 편집, 미리보기, PDF 저장까지 되는 무료 마크다운 뷰어·리더.">
+<meta name="keywords" content="md 뷰어, 마크다운 뷰어, md 리더, 마크다운 리더, md 파일 열기">
 <link rel="canonical" href="https://readmd.kr/">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="ReadMD">
-<meta property="og:title" content="ReadMD - md 파일을 바로 읽는 마크다운 뷰어">
-<meta property="og:description" content="AI가 만들어 준 .md 파일, 설치 없이 끌어다 놓기만 하세요. 편집·미리보기·저장까지, 파일은 브라우저 밖으로 나가지 않습니다.">
+<meta property="og:title" content="MD 파일, 드래그해서 바로 읽기 - ReadMD">
+<meta property="og:description" content="설치·가입 없이 md 파일을 창에 끌어다 놓으면 바로 읽힙니다. 편집, 미리보기, PDF 저장까지. 파일은 서버로 가지 않습니다.">
 <meta property="og:url" content="https://readmd.kr/">
 <meta property="og:image" content="https://readmd.kr/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:locale" content="ko_KR">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="ReadMD - md 파일을 바로 읽는 마크다운 뷰어">
-<meta name="twitter:description" content="AI가 만들어 준 .md 파일, 설치 없이 끌어다 놓기만 하세요. 파일은 브라우저 밖으로 나가지 않습니다.">
+<meta name="twitter:title" content="MD 파일, 드래그해서 바로 읽기 - ReadMD">
+<meta name="twitter:description" content="설치·가입 없이 md 파일을 창에 끌어다 놓으면 바로 읽힙니다. 파일은 서버로 가지 않습니다.">
 <meta name="twitter:image" content="https://readmd.kr/og.png">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"ReadMD","alternateName":"리드엠디","applicationCategory":"UtilitiesApplication","operatingSystem":"Web","url":"https://readmd.kr/","description":"설치 없이 브라우저에서 .md 파일을 읽고 편집하는 무료 마크다운 뷰어","offers":{"@type":"Offer","price":"0","priceCurrency":"KRW"},"author":{"@type":"Organization","name":"주식회사 쓰리앤디"},"inLanguage":"ko"}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"ReadMD","alternateName":"리드엠디","applicationCategory":"UtilitiesApplication","operatingSystem":"Web","url":"https://readmd.kr/","description":"md 파일을 드래그해서 바로 읽는 무료 마크다운 뷰어·리더. 설치·가입·서버 전송 없음.","offers":{"@type":"Offer","price":"0","priceCurrency":"KRW"},"author":{"@type":"Organization","name":"주식회사 쓰리앤디"},"inLanguage":"ko"}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
@@ -274,11 +274,11 @@ const src = $('#src'), md = $('#md'), previewScroll = $('#previewScroll'), tabba
 
 const STORE = 'readmd.v1';
 const SPONSOR_URL = ''; // 예: https://buymeacoffee.com/readmd — 비워 두면 버튼이 숨겨집니다
-const SAMPLE_NAME = 'ReadMD 시작하기.md';
-const SAMPLE = `# ReadMD에 오신 것을 환영합니다
+const SAMPLE_NAME = '시작하기.md';
+const SAMPLE = `# MD 파일을 드래그해서 바로 읽으세요
 
-Claude나 ChatGPT가 만들어 준 \`.md\` 파일을 **설치 없이, VS Code 없이** 바로 읽고 고치는 무료 도구입니다.
-이 문서는 예시입니다. 왼쪽 원문을 고쳐 보면 오른쪽이 바로 바뀝니다.
+이 창 아무 곳에나 \`.md\` 파일을 **끌어다 놓으면** 열립니다. 설치도, 가입도 없습니다.
+Claude나 ChatGPT가 만들어 준 문서를 VS Code 없이 읽고 고칠 때 쓰세요. 이 글은 예시라서 왼쪽 원문을 고치면 오른쪽이 바로 바뀝니다.
 
 > 🔒 올린 파일은 **브라우저 안에서만** 처리됩니다. 어떤 서버로도 전송되지 않으니 회사 문서도 안심하고 여세요.
 
@@ -419,7 +419,7 @@ let renderSeq = 0;
 function render(force){
   const f = active();
   slugCounts = {};
-  if (!f){ md.innerHTML = '<div class="empty-state"><div><b>열린 문서가 없습니다</b>.md 파일을 이 창에 끌어다 놓거나, 위의 “열기” 버튼을 누르세요.</div></div>'; toc.innerHTML = ''; updateStat(); return; }
+  if (!f){ md.innerHTML = '<div class="empty-state"><div><b>md 파일을 이 창에 끌어다 놓으세요</b>바로 읽힙니다. 위의 “열기” 버튼으로 골라도 됩니다.</div></div>'; toc.innerHTML = ''; updateStat(); return; }
   const html = DOMPurify.sanitize(marked.parse(f.text), { ADD_ATTR: ['id'] });
   md.innerHTML = html;
   md.querySelectorAll('pre code[class^="language-"]').forEach(el => {
