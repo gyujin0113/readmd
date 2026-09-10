@@ -50,3 +50,8 @@ npx wrangler deploy
 scripts/stats.sh        # 최근 7일
 scripts/stats.sh 30     # 최근 30일
 ```
+
+## 안내 페이지 / 사전 렌더링
+
+- `scripts/build-guides.py` — 검색 의도별 안내 페이지(`/md-viewer`, `/md-file`, `/md-to-pdf`, `/chatgpt-md`)와 `sitemap.xml`을 생성합니다. 내용은 스크립트 안의 `PAGES`에서 수정합니다.
+- `scripts/prerender.py` — 첫 화면 예시 문서를 정적 HTML로 `index.html`에 심습니다(자바스크립트를 실행하지 않는 검색 봇용). 예시 문서(`SAMPLE`)를 고친 뒤 실행하세요.

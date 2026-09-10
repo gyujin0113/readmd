@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>마크다운 PDF 변환 - md 파일을 PDF로 저장 (설치 없이) | ReadMD</title>
+<meta name="description" content="md 파일을 PDF로 바꾸는 가장 쉬운 방법. 파일을 끌어다 놓고 PDF 버튼만 누르면 됩니다. 설치·가입·업로드 없이 브라우저에서 바로 변환.">
+<link rel="canonical" href="https://readmd.kr/md-to-pdf">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="ReadMD">
+<meta property="og:title" content="마크다운을 PDF로, 버튼 하나로">
+<meta property="og:description" content="md 파일을 PDF로 바꾸는 가장 쉬운 방법. 파일을 끌어다 놓고 PDF 버튼만 누르면 됩니다. 설치·가입·업로드 없이 브라우저에서 바로 변환.">
+<meta property="og:url" content="https://readmd.kr/md-to-pdf">
+<meta property="og:image" content="https://readmd.kr/og.png">
+<meta property="og:locale" content="ko_KR">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "md를 PDF로 바꾸는 데 돈이 드나요?", "acceptedAnswer": {"@type": "Answer", "text": "아니요. ReadMD는 무료이고 횟수 제한이 없습니다."}}, {"@type": "Question", "name": "워드(docx)로도 바꿀 수 있나요?", "acceptedAnswer": {"@type": "Answer", "text": "HTML로 내보낸 뒤 워드에서 열면 서식이 대부분 유지됩니다. 바로 .docx로 내보내는 기능은 준비 중입니다."}}, {"@type": "Question", "name": "PDF에 편집기 화면도 같이 나오나요?", "acceptedAnswer": {"@type": "Answer", "text": "아니요. 인쇄할 때는 미리보기 문서만 나오고 편집기와 버튼은 빠집니다."}}, {"@type": "Question", "name": "휴대폰에서도 PDF로 저장되나요?", "acceptedAnswer": {"@type": "Answer", "text": "네. 휴대폰 브라우저의 공유/인쇄 메뉴에서 PDF로 저장을 고르면 됩니다."}}]}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{--bg:#f3f4f7;--surface:#fff;--surface-2:#eaecf1;--line:#d8dbe3;--ink:#1b1f27;--ink-2:#4b5262;--ink-3:#7a8194;--accent:#2f56d9;--accent-ink:#fff;--accent-soft:#e6ecfb;--code-bg:#f0f2f6;--sans:"IBM Plex Sans KR","Apple SD Gothic Neo","Noto Sans KR",system-ui,sans-serif;--mono:"IBM Plex Mono","SF Mono",Menlo,monospace;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#121419;--surface:#1a1d24;--surface-2:#22262f;--line:#2e333e;--ink:#e7e9ef;--ink-2:#aab0be;--ink-3:#737a8a;--accent:#7d9bff;--accent-ink:#0f1320;--accent-soft:#25304f;--code-bg:#252a34;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#121419;--surface:#1a1d24;--surface-2:#22262f;--line:#2e333e;--ink:#e7e9ef;--ink-2:#aab0be;--ink-3:#737a8a;--accent:#7d9bff;--accent-ink:#0f1320;--accent-soft:#25304f;--code-bg:#252a34;color-scheme:dark}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.75}
+a{color:var(--accent)}
+.top{display:flex;align-items:center;gap:10px;padding:10px 20px;background:var(--surface);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:8px;font-weight:700;color:inherit;text-decoration:none}
+.mark{width:24px;height:22px;border-radius:6px;background:var(--accent);color:var(--accent-ink);display:grid;place-items:center;font-family:var(--mono);font-size:10px;font-weight:600}
+.top .cta{margin-left:auto}
+.cta{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:8px;background:var(--accent);color:var(--accent-ink);text-decoration:none;font-weight:600;white-space:nowrap}
+.cta:hover{filter:brightness(1.08)}
+main{max-width:720px;margin:0 auto;padding:36px 20px 80px}
+h1{font-size:2rem;line-height:1.25;letter-spacing:-.02em;margin:0 0 12px;text-wrap:balance}
+.lead{font-size:1.1rem;color:var(--ink-2);margin:0 0 20px}
+.drop{border:2px dashed var(--line);border-radius:14px;padding:28px 20px;text-align:center;background:var(--surface);cursor:pointer;margin:0 0 36px;transition:.15s}
+.drop:hover,.drop.on{border-color:var(--accent);background:var(--accent-soft)}
+.drop b{display:block;font-size:1.15rem;margin-bottom:4px}.drop span{color:var(--ink-3);font-size:.95rem}
+h2{font-size:1.35rem;margin:36px 0 10px;letter-spacing:-.01em}
+h3{font-size:1.05rem;margin:22px 0 6px}
+ol,ul{padding-left:1.4em}li{margin:.3em 0}
+code{font-family:var(--mono);font-size:.9em;background:var(--code-bg);padding:.1em .35em;border-radius:4px}
+.faq details{border-top:1px solid var(--line);padding:10px 0}.faq details:last-child{border-bottom:1px solid var(--line)}
+.faq summary{cursor:pointer;font-weight:600}.faq p{margin:8px 0 0;color:var(--ink-2)}
+.bottom{margin-top:44px;padding:24px;border-radius:14px;background:var(--surface);border:1px solid var(--line);text-align:center}
+.bottom p{margin:0 0 12px;color:var(--ink-2)}
+nav.more{margin-top:36px;font-size:.92rem;color:var(--ink-3)}nav.more a{margin-right:12px}
+footer{text-align:center;color:var(--ink-3);font-size:.85rem;padding:20px}
+input[type=file]{display:none}
+</style>
+</head>
+<body>
+<header class="top">
+  <a class="brand" href="/"><span class="mark">MD</span><span>ReadMD</span></a>
+  <a class="cta" href="/">md 파일 바로 열기</a>
+</header>
+<main>
+  <h1>마크다운을 PDF로, 버튼 하나로</h1>
+  <p class="lead">md 파일을 아래에 끌어다 놓고 PDF 버튼을 누르면 미리보기에 보이는 그대로 PDF가 됩니다.</p>
+  <div class="drop" id="drop" role="button" tabindex="0"><b>여기에 md 파일을 끌어다 놓으세요</b><span>또는 클릭해서 파일 선택 · 설치 없음 · 서버 전송 없음</span></div>
+  <input type="file" id="file" accept=".md,.markdown,.mdx,.txt,text/markdown,text/plain">
+  <h2>md 파일을 PDF로 저장하는 방법</h2>
+<p><ol><li>md 파일을 이 페이지나 <a href="/">readmd.kr</a>에 끌어다 놓습니다.</li><li>오른쪽 미리보기에서 서식이 제대로 보이는지 확인합니다. 필요하면 왼쪽에서 고칩니다.</li><li>상단의 <strong>PDF</strong> 버튼을 누릅니다. 브라우저 인쇄 창이 열립니다.</li><li>대상(프린터)을 <strong>"PDF로 저장"</strong>으로 고르고 저장합니다.</li></ol>제목, 표, 목록, 코드 블록, 체크리스트가 화면에 보이는 그대로 PDF에 들어갑니다. 편집기와 버튼은 빠지고 문서만 인쇄됩니다.</p>
+<h2>변환 사이트에 올리지 않아도 되는 이유</h2>
+<p>마크다운 PDF 변환 사이트는 대부분 파일을 서버에 올려서 변환한 뒤 내려받게 합니다. 회사 문서나 계약 내용이 담긴 파일이라면 꺼림칙합니다.<br><br>ReadMD는 파일을 브라우저 안에서 서식으로 바꾸고, PDF는 브라우저의 인쇄 기능으로 만듭니다. 파일이 컴퓨터 밖으로 나가지 않습니다. 회원가입도, 하루 변환 횟수 제한도 없습니다.</p>
+<h2>보기 좋게 뽑는 팁</h2>
+<p><ul><li>인쇄 창에서 <strong>여백</strong>을 "기본" 또는 "좁게"로 두면 A4 한 장에 더 많이 들어갑니다.</li><li>표가 넓으면 <strong>가로 방향</strong>으로 바꾸세요.</li><li><strong>배경 그래픽</strong> 옵션을 켜면 코드 블록의 회색 배경과 인용문 표시가 유지됩니다.</li><li>PDF 대신 HTML로 내보내면(HTML 버튼) 메일이나 메신저로 보냈을 때 받는 사람이 바로 열 수 있습니다.</li></ul></p>
+  <h2>자주 묻는 질문</h2>
+  <div class="faq"><details><summary>md를 PDF로 바꾸는 데 돈이 드나요?</summary><p>아니요. ReadMD는 무료이고 횟수 제한이 없습니다.</p></details>
+<details><summary>워드(docx)로도 바꿀 수 있나요?</summary><p>HTML로 내보낸 뒤 워드에서 열면 서식이 대부분 유지됩니다. 바로 .docx로 내보내는 기능은 준비 중입니다.</p></details>
+<details><summary>PDF에 편집기 화면도 같이 나오나요?</summary><p>아니요. 인쇄할 때는 미리보기 문서만 나오고 편집기와 버튼은 빠집니다.</p></details>
+<details><summary>휴대폰에서도 PDF로 저장되나요?</summary><p>네. 휴대폰 브라우저의 공유/인쇄 메뉴에서 PDF로 저장을 고르면 됩니다.</p></details></div>
+  <div class="bottom"><p>파일을 끌어다 놓기만 하면 됩니다. 설치도 가입도 없습니다.</p><a class="cta" href="/">md 파일 바로 열기</a></div>
+  <nav class="more">더 알아보기: <a href="/md-viewer">MD 뷰어, 설치 없이 바로 쓰기</a> · <a href="/md-file">MD 파일이란? 여는 법까지 한 번에</a> · <a href="/chatgpt-md">ChatGPT·Claude가 준 md 파일, 바로 읽기</a> · <a href="https://github.com/gyujin0113/readmd" target="_blank" rel="noopener">GitHub</a></nav>
+</main>
+<footer>© 2026 ReadMD · 주식회사 쓰리앤디 · MIT 오픈소스</footer>
+<script>
+(function(){
+  const drop=document.getElementById('drop'), input=document.getElementById('file');
+  const OK=/\.(md|markdown|mdx|txt)$/i;
+  async function go(list){
+    const f=Array.from(list).find(x=>OK.test(x.name)||/^text\//.test(x.type));
+    if(!f){alert('.md, .markdown, .txt 파일만 열 수 있습니다.');return;}
+    const text=await f.text();
+    try{localStorage.setItem('readmd.handoff',JSON.stringify({name:f.name,text}));}catch(e){}
+    location.href='/';
+  }
+  drop.addEventListener('click',()=>input.click());
+  input.addEventListener('change',()=>go(input.files));
+  let d=0;
+  window.addEventListener('dragenter',e=>{if(e.dataTransfer&&Array.from(e.dataTransfer.types).includes('Files')){d++;drop.classList.add('on');}});
+  window.addEventListener('dragleave',()=>{if(--d<=0){d=0;drop.classList.remove('on');}});
+  window.addEventListener('dragover',e=>e.preventDefault());
+  window.addEventListener('drop',e=>{e.preventDefault();d=0;drop.classList.remove('on');if(e.dataTransfer.files.length)go(e.dataTransfer.files);});
+})();
+</script>
+</body>
+</html>

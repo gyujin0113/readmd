@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MD 파일이란? md 파일 여는 법 (설치 없이 3초) | ReadMD</title>
+<meta name="description" content="md 파일은 마크다운 형식의 텍스트 문서입니다. 메모장으로 열면 기호만 보이는 이유와, 설치 없이 브라우저에서 md 파일을 제대로 여는 방법을 설명합니다.">
+<link rel="canonical" href="https://readmd.kr/md-file">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="ReadMD">
+<meta property="og:title" content="MD 파일이란? 여는 법까지 한 번에">
+<meta property="og:description" content="md 파일은 마크다운 형식의 텍스트 문서입니다. 메모장으로 열면 기호만 보이는 이유와, 설치 없이 브라우저에서 md 파일을 제대로 여는 방법을 설명합니다.">
+<meta property="og:url" content="https://readmd.kr/md-file">
+<meta property="og:image" content="https://readmd.kr/og.png">
+<meta property="og:locale" content="ko_KR">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "md 파일은 위험한가요?", "acceptedAnswer": {"@type": "Answer", "text": "아니요. 글자만 들어 있는 텍스트 파일이라 실행되지 않습니다. 워드 매크로 같은 위험이 없습니다."}}, {"@type": "Question", "name": "md 파일을 워드나 한글로 바꿀 수 있나요?", "acceptedAnswer": {"@type": "Answer", "text": "ReadMD에서 HTML로 내보낸 뒤 워드에서 열면 서식이 대부분 유지됩니다. PDF는 바로 저장됩니다."}}, {"@type": "Question", "name": "md 파일은 어떻게 만드나요?", "acceptedAnswer": {"@type": "Answer", "text": "메모장에 마크다운 규칙으로 쓰고 .md로 저장하면 됩니다. ReadMD의 '새 문서'에서 써서 저장해도 됩니다."}}, {"@type": "Question", "name": "휴대폰에서도 열리나요?", "acceptedAnswer": {"@type": "Answer", "text": "네. 휴대폰 브라우저에서 readmd.kr을 열고 '열기' 버튼으로 파일을 고르면 됩니다."}}]}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{--bg:#f3f4f7;--surface:#fff;--surface-2:#eaecf1;--line:#d8dbe3;--ink:#1b1f27;--ink-2:#4b5262;--ink-3:#7a8194;--accent:#2f56d9;--accent-ink:#fff;--accent-soft:#e6ecfb;--code-bg:#f0f2f6;--sans:"IBM Plex Sans KR","Apple SD Gothic Neo","Noto Sans KR",system-ui,sans-serif;--mono:"IBM Plex Mono","SF Mono",Menlo,monospace;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#121419;--surface:#1a1d24;--surface-2:#22262f;--line:#2e333e;--ink:#e7e9ef;--ink-2:#aab0be;--ink-3:#737a8a;--accent:#7d9bff;--accent-ink:#0f1320;--accent-soft:#25304f;--code-bg:#252a34;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#121419;--surface:#1a1d24;--surface-2:#22262f;--line:#2e333e;--ink:#e7e9ef;--ink-2:#aab0be;--ink-3:#737a8a;--accent:#7d9bff;--accent-ink:#0f1320;--accent-soft:#25304f;--code-bg:#252a34;color-scheme:dark}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.75}
+a{color:var(--accent)}
+.top{display:flex;align-items:center;gap:10px;padding:10px 20px;background:var(--surface);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:8px;font-weight:700;color:inherit;text-decoration:none}
+.mark{width:24px;height:22px;border-radius:6px;background:var(--accent);color:var(--accent-ink);display:grid;place-items:center;font-family:var(--mono);font-size:10px;font-weight:600}
+.top .cta{margin-left:auto}
+.cta{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:8px;background:var(--accent);color:var(--accent-ink);text-decoration:none;font-weight:600;white-space:nowrap}
+.cta:hover{filter:brightness(1.08)}
+main{max-width:720px;margin:0 auto;padding:36px 20px 80px}
+h1{font-size:2rem;line-height:1.25;letter-spacing:-.02em;margin:0 0 12px;text-wrap:balance}
+.lead{font-size:1.1rem;color:var(--ink-2);margin:0 0 20px}
+.drop{border:2px dashed var(--line);border-radius:14px;padding:28px 20px;text-align:center;background:var(--surface);cursor:pointer;margin:0 0 36px;transition:.15s}
+.drop:hover,.drop.on{border-color:var(--accent);background:var(--accent-soft)}
+.drop b{display:block;font-size:1.15rem;margin-bottom:4px}.drop span{color:var(--ink-3);font-size:.95rem}
+h2{font-size:1.35rem;margin:36px 0 10px;letter-spacing:-.01em}
+h3{font-size:1.05rem;margin:22px 0 6px}
+ol,ul{padding-left:1.4em}li{margin:.3em 0}
+code{font-family:var(--mono);font-size:.9em;background:var(--code-bg);padding:.1em .35em;border-radius:4px}
+.faq details{border-top:1px solid var(--line);padding:10px 0}.faq details:last-child{border-bottom:1px solid var(--line)}
+.faq summary{cursor:pointer;font-weight:600}.faq p{margin:8px 0 0;color:var(--ink-2)}
+.bottom{margin-top:44px;padding:24px;border-radius:14px;background:var(--surface);border:1px solid var(--line);text-align:center}
+.bottom p{margin:0 0 12px;color:var(--ink-2)}
+nav.more{margin-top:36px;font-size:.92rem;color:var(--ink-3)}nav.more a{margin-right:12px}
+footer{text-align:center;color:var(--ink-3);font-size:.85rem;padding:20px}
+input[type=file]{display:none}
+</style>
+</head>
+<body>
+<header class="top">
+  <a class="brand" href="/"><span class="mark">MD</span><span>ReadMD</span></a>
+  <a class="cta" href="/">md 파일 바로 열기</a>
+</header>
+<main>
+  <h1>MD 파일이란? 여는 법까지 한 번에</h1>
+  <p class="lead">md 파일을 받았는데 열어 보니 기호만 잔뜩 보이셨나요? 아래에 파일을 끌어다 놓으면 제대로 보입니다.</p>
+  <div class="drop" id="drop" role="button" tabindex="0"><b>여기에 md 파일을 끌어다 놓으세요</b><span>또는 클릭해서 파일 선택 · 설치 없음 · 서버 전송 없음</span></div>
+  <input type="file" id="file" accept=".md,.markdown,.mdx,.txt,text/markdown,text/plain">
+  <h2>md 파일이란</h2>
+<p>확장자가 <code>.md</code>인 파일은 <strong>마크다운(Markdown)</strong>으로 쓴 텍스트 문서입니다. 마크다운은 2004년에 만들어진 간단한 문서 규칙으로, 워드처럼 버튼을 눌러 서식을 주는 대신 기호로 표시합니다.<br><br><ul><li><code># 제목</code> → 큰 제목, <code>## 제목</code> → 작은 제목</li><li><code>- 항목</code> → 글머리 목록, <code>1. 항목</code> → 번호 목록</li><li><code>**굵게**</code> → <strong>굵게</strong>, <code>*기울임*</code> → <em>기울임</em></li><li><code>| 칸 | 칸 |</code> → 표, <code>- [ ] 할 일</code> → 체크리스트</li></ul>내용이 순수한 글자라서 용량이 작고, 어떤 프로그램에서도 열리고, GitHub·노션·옵시디언·ChatGPT·Claude가 모두 이 형식을 씁니다.</p>
+<h2>메모장으로 열면 기호만 보이는 이유</h2>
+<p>md 파일은 어디까지나 텍스트 파일이라 메모장이나 텍스트 편집기가 기본으로 열립니다. 그러면 <code>#</code>이나 <code>**</code> 같은 기호가 서식으로 바뀌지 않고 그대로 보입니다. 내용은 읽을 수 있지만 표가 깨지고 제목 구분이 안 됩니다.<br><br>서식대로 보려면 <strong>마크다운 뷰어</strong>로 열어야 합니다. 개발자는 VS Code 같은 편집기를 쓰지만, 그냥 읽기만 하려는 사람에게는 과합니다.</p>
+<h2>설치 없이 md 파일 여는 법</h2>
+<p><ol><li>브라우저에서 <a href="/">readmd.kr</a>을 엽니다. 이 페이지에서도 됩니다.</li><li>md 파일을 창에 끌어다 놓습니다. 휴대폰에서는 "열기" 버튼을 누르고 파일을 고릅니다.</li><li>제목, 표, 목록, 코드가 서식대로 보입니다. 고칠 수도 있고, PDF로 저장할 수도 있습니다.</li></ol>파일은 브라우저 안에서만 처리되고 어디에도 업로드되지 않습니다.</p>
+<h2>md 파일을 여는 다른 방법</h2>
+<p><ul><li><strong>VS Code</strong>: 무료 편집기. 파일을 연 뒤 미리보기 버튼을 누릅니다. 개발자라면 이미 있을 겁니다.</li><li><strong>Typora, Obsidian, MarkText</strong>: 설치형 마크다운 편집기. 자주 쓴다면 좋지만 한두 번 열어 보려고 깔기엔 무겁습니다.</li><li><strong>크롬 확장 프로그램</strong>: 브라우저에 설치하면 md 파일을 열 때 서식으로 보여 줍니다. 파일 접근 권한을 줘야 합니다.</li><li><strong>ReadMD</strong>: 설치 없이 브라우저에서 바로. 가끔 열어 보는 사람에게 가장 빠릅니다.</li></ul></p>
+  <h2>자주 묻는 질문</h2>
+  <div class="faq"><details><summary>md 파일은 위험한가요?</summary><p>아니요. 글자만 들어 있는 텍스트 파일이라 실행되지 않습니다. 워드 매크로 같은 위험이 없습니다.</p></details>
+<details><summary>md 파일을 워드나 한글로 바꿀 수 있나요?</summary><p>ReadMD에서 HTML로 내보낸 뒤 워드에서 열면 서식이 대부분 유지됩니다. PDF는 바로 저장됩니다.</p></details>
+<details><summary>md 파일은 어떻게 만드나요?</summary><p>메모장에 마크다운 규칙으로 쓰고 .md로 저장하면 됩니다. ReadMD의 &#x27;새 문서&#x27;에서 써서 저장해도 됩니다.</p></details>
+<details><summary>휴대폰에서도 열리나요?</summary><p>네. 휴대폰 브라우저에서 readmd.kr을 열고 &#x27;열기&#x27; 버튼으로 파일을 고르면 됩니다.</p></details></div>
+  <div class="bottom"><p>파일을 끌어다 놓기만 하면 됩니다. 설치도 가입도 없습니다.</p><a class="cta" href="/">md 파일 바로 열기</a></div>
+  <nav class="more">더 알아보기: <a href="/md-viewer">MD 뷰어, 설치 없이 바로 쓰기</a> · <a href="/md-to-pdf">마크다운을 PDF로, 버튼 하나로</a> · <a href="/chatgpt-md">ChatGPT·Claude가 준 md 파일, 바로 읽기</a> · <a href="https://github.com/gyujin0113/readmd" target="_blank" rel="noopener">GitHub</a></nav>
+</main>
+<footer>© 2026 ReadMD · 주식회사 쓰리앤디 · MIT 오픈소스</footer>
+<script>
+(function(){
+  const drop=document.getElementById('drop'), input=document.getElementById('file');
+  const OK=/\.(md|markdown|mdx|txt)$/i;
+  async function go(list){
+    const f=Array.from(list).find(x=>OK.test(x.name)||/^text\//.test(x.type));
+    if(!f){alert('.md, .markdown, .txt 파일만 열 수 있습니다.');return;}
+    const text=await f.text();
+    try{localStorage.setItem('readmd.handoff',JSON.stringify({name:f.name,text}));}catch(e){}
+    location.href='/';
+  }
+  drop.addEventListener('click',()=>input.click());
+  input.addEventListener('change',()=>go(input.files));
+  let d=0;
+  window.addEventListener('dragenter',e=>{if(e.dataTransfer&&Array.from(e.dataTransfer.types).includes('Files')){d++;drop.classList.add('on');}});
+  window.addEventListener('dragleave',()=>{if(--d<=0){d=0;drop.classList.remove('on');}});
+  window.addEventListener('dragover',e=>e.preventDefault());
+  window.addEventListener('drop',e=>{e.preventDefault();d=0;drop.classList.remove('on');if(e.dataTransfer.files.length)go(e.dataTransfer.files);});
+})();
+</script>
+</body>
+</html>

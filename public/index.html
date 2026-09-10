@@ -244,7 +244,76 @@ textarea#src::placeholder{color:var(--ink-3)}
     <div class="divider" id="divider" title="드래그해서 폭 조절, 더블클릭으로 초기화"></div>
     <section class="preview">
       <div class="pane-head">미리보기 <span class="sp" id="fileLabel"></span></div>
-      <div class="preview-scroll" id="previewScroll"><article class="md" id="md"></article></div>
+      <div class="preview-scroll" id="previewScroll"><article class="md" id="md"><h1 id="md-파일을-드래그해서-바로-읽으세요">MD 파일을 드래그해서 바로 읽으세요</h1>
+<p>이 창 아무 곳에나 <code>.md</code> 파일을 <strong>끌어다 놓으면</strong> 열립니다. 설치도, 가입도 없습니다.
+Claude나 ChatGPT가 만들어 준 문서를 VS Code 없이 읽고 고칠 때 쓰세요. 이 글은 예시라서 왼쪽 원문을 고치면 오른쪽이 바로 바뀝니다.</p>
+<blockquote>
+<p>🔒 올린 파일은 <strong>브라우저 안에서만</strong> 처리됩니다. 어떤 서버로도 전송되지 않으니 회사 문서도 안심하고 여세요.</p>
+</blockquote>
+<h2 id="사용법">사용법</h2>
+<ol>
+<li>창 아무 곳에나 <code>.md</code> 파일을 <strong>끌어다 놓으세요</strong>. 여러 개도 됩니다.</li>
+<li>왼쪽에서 고치고, 오른쪽에서 확인합니다.</li>
+<li><code>⌘S</code>(Windows는 <code>Ctrl+S</code>)로 <code>.md</code> 파일을 다시 저장합니다.</li>
+</ol>
+<blockquote>
+<p>열어 둔 파일과 수정 내용은 이 브라우저에 자동 보관되어, 새로고침해도 사라지지 않습니다.
+여러 개를 한 번에 열면 위쪽 탭으로 오갈 수 있습니다.</p>
+</blockquote>
+<h2 id="지원하는-문법">지원하는 문법</h2>
+<ul>
+<li class="task"><input checked="" disabled="" type="checkbox"> 표, 체크리스트, 각주 같은 GitHub 확장 문법</li>
+<li class="task"><input checked="" disabled="" type="checkbox"> 코드 하이라이트</li>
+<li class="task"><input checked="" disabled="" type="checkbox"> Mermaid 다이어그램</li>
+<li class="task"><input disabled="" type="checkbox"> 수식(KaTeX)은 아직 지원하지 않습니다</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>기능</th>
+<th>단축키</th>
+<th>비고</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>저장</td>
+<td>⌘S</td>
+<td>.md 파일로 내려받기</td>
+</tr>
+<tr>
+<td>열기</td>
+<td>⌘O</td>
+<td>여러 파일 선택 가능</td>
+</tr>
+<tr>
+<td>보기 전환</td>
+<td>⌘⇧P</td>
+<td>편집 → 분할 → 미리보기</td>
+</tr>
+</tbody></table>
+<pre><span class="lang">js</span><code class="language-js hljs language-javascript" data-highlighted="yes"><span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">loadMarkdown</span>(<span class="hljs-params">file</span>) {
+  <span class="hljs-keyword">const</span> text = <span class="hljs-keyword">await</span> file.<span class="hljs-title function_">text</span>();
+  <span class="hljs-keyword">return</span> marked.<span class="hljs-title function_">parse</span>(text); <span class="hljs-comment">// 렌더링 결과</span>
+}</code></pre>
+<pre class="mermaid">flowchart LR
+  A[.md 파일] --&gt;|드래그| B(ReadMD)
+  B --&gt; C{보기}
+  C --&gt; D[편집기]
+  C --&gt; E[미리보기]</pre>
+<h2 id="자주-묻는-질문">자주 묻는 질문</h2>
+<h3 id="md-파일이-뭔가요">md 파일이 뭔가요?</h3>
+<p>마크다운(Markdown) 형식으로 쓴 텍스트 문서입니다. <code>#</code>는 제목, <code>-</code>는 목록, <code>**굵게**</code>처럼 기호로 서식을 표시합니다. 메모장으로 열면 기호만 보이고, 마크다운 뷰어로 열어야 제목·표·목록이 제대로 보입니다.</p>
+<h3 id="md-파일은-어떻게-여나요">md 파일은 어떻게 여나요?</h3>
+<p>이 창에 끌어다 놓거나 위의 "열기" 버튼을 누르면 됩니다. 프로그램 설치나 회원가입은 필요 없고, 휴대폰 브라우저에서도 됩니다.</p>
+<h3 id="pdf로-저장하려면">PDF로 저장하려면?</h3>
+<p>위의 <strong>PDF</strong> 버튼을 누르고 인쇄 창에서 "PDF로 저장"을 고르세요. 미리보기에 보이는 그대로 저장됩니다. <strong>HTML</strong> 버튼은 렌더링된 결과를 파일 하나로 내보내서 메일이나 메신저로 보내기 좋습니다.</p>
+<h3 id="파일이-어디로-업로드되나요">파일이 어디로 업로드되나요?</h3>
+<p>아니요. 파일은 이 브라우저 안에서만 읽히고 어떤 서버에도 전송되지 않습니다. 회사 문서나 개인 메모를 열어도 됩니다.</p>
+<h3 id="고친-내용은-어떻게-저장하나요">고친 내용은 어떻게 저장하나요?</h3>
+<p><strong>.md 저장</strong> 버튼(⌘S / Ctrl+S)을 누르면 고친 파일을 내려받습니다. 열어 둔 파일과 수정 내용은 이 브라우저에 자동 보관돼서 새로고침해도 남아 있습니다.</p>
+<h3 id="더-알아보기">더 알아보기</h3>
+<p><a href="/md-viewer">md 뷰어 안내</a> · <a href="/md-file">md 파일이란</a> · <a href="/md-to-pdf">마크다운을 PDF로</a> · <a href="/chatgpt-md">ChatGPT·Claude md 파일 열기</a> · 오픈소스 <a href="https://github.com/gyujin0113/readmd">GitHub</a></p>
+</article></div>
     </section>
   </div>
 
@@ -252,6 +321,7 @@ textarea#src::placeholder{color:var(--ink-3)}
     <span id="stat"></span>
     <span class="hint priv" title="파일은 브라우저 안에서만 처리되며, 어떤 서버로도 전송되지 않습니다.">🔒 서버 전송 없음</span>
     <span class="sp hint"><span class="kbd">⌘S</span> 저장 &nbsp; <span class="kbd">⌘O</span> 열기 &nbsp; <span class="kbd">⌘⇧P</span> 보기 전환</span>
+    <a class="hint link" href="/md-viewer">md 뷰어 안내</a>
     <a class="hint link" href="https://github.com/gyujin0113/readmd" target="_blank" rel="noopener">GitHub</a>
     <a class="hint link" id="sponsorLink" href="#" target="_blank" rel="noopener" hidden>후원하기</a>
   </footer>
@@ -298,15 +368,11 @@ Claude나 ChatGPT가 만들어 준 문서를 VS Code 없이 읽고 고칠 때 �
 - [x] Mermaid 다이어그램
 - [ ] 수식(KaTeX)은 아직 지원하지 않습니다
 
-### 표
-
 | 기능 | 단축키 | 비고 |
 |---|---|---|
 | 저장 | ⌘S | .md 파일로 내려받기 |
 | 열기 | ⌘O | 여러 파일 선택 가능 |
 | 보기 전환 | ⌘⇧P | 편집 → 분할 → 미리보기 |
-
-### 코드
 
 \`\`\`js
 async function loadMarkdown(file) {
@@ -314,8 +380,6 @@ async function loadMarkdown(file) {
   return marked.parse(text); // 렌더링 결과
 }
 \`\`\`
-
-### 다이어그램
 
 \`\`\`mermaid
 flowchart LR
@@ -325,12 +389,31 @@ flowchart LR
   C --> E[미리보기]
 \`\`\`
 
-## 팁
+## 자주 묻는 질문
 
-- 목차 버튼을 누르면 왼쪽에 제목 목록이 나타납니다. 긴 문서에서 유용합니다.
-- **HTML** 버튼은 렌더링된 결과를 단일 HTML 파일로 내보냅니다. 메일이나 카톡으로 보내기 좋습니다.
-- **PDF** 버튼은 브라우저 인쇄 화면을 엽니다. "PDF로 저장"을 고르면 됩니다.
-- 오픈소스입니다. 불편한 점이나 아이디어는 [GitHub](https://github.com/gyujin0113/readmd)에 남겨 주세요.
+### md 파일이 뭔가요?
+
+마크다운(Markdown) 형식으로 쓴 텍스트 문서입니다. \`#\`는 제목, \`-\`는 목록, \`**굵게**\`처럼 기호로 서식을 표시합니다. 메모장으로 열면 기호만 보이고, 마크다운 뷰어로 열어야 제목·표·목록이 제대로 보입니다.
+
+### md 파일은 어떻게 여나요?
+
+이 창에 끌어다 놓거나 위의 "열기" 버튼을 누르면 됩니다. 프로그램 설치나 회원가입은 필요 없고, 휴대폰 브라우저에서도 됩니다.
+
+### PDF로 저장하려면?
+
+위의 **PDF** 버튼을 누르고 인쇄 창에서 "PDF로 저장"을 고르세요. 미리보기에 보이는 그대로 저장됩니다. **HTML** 버튼은 렌더링된 결과를 파일 하나로 내보내서 메일이나 메신저로 보내기 좋습니다.
+
+### 파일이 어디로 업로드되나요?
+
+아니요. 파일은 이 브라우저 안에서만 읽히고 어떤 서버에도 전송되지 않습니다. 회사 문서나 개인 메모를 열어도 됩니다.
+
+### 고친 내용은 어떻게 저장하나요?
+
+**.md 저장** 버튼(⌘S / Ctrl+S)을 누르면 고친 파일을 내려받습니다. 열어 둔 파일과 수정 내용은 이 브라우저에 자동 보관돼서 새로고침해도 남아 있습니다.
+
+### 더 알아보기
+
+[md 뷰어 안내](/md-viewer) · [md 파일이란](/md-file) · [마크다운을 PDF로](/md-to-pdf) · [ChatGPT·Claude md 파일 열기](/chatgpt-md) · 오픈소스 [GitHub](https://github.com/gyujin0113/readmd)
 `;
 
 /* ---------- state ---------- */
@@ -659,9 +742,19 @@ let toastTimer = null;
 function showToast(msg){ toast.textContent = msg; toast.classList.add('on'); clearTimeout(toastTimer); toastTimer = setTimeout(() => toast.classList.remove('on'), 2200); }
 
 /* ---------- boot ---------- */
+function takeHandoff(){
+  try{
+    const h = JSON.parse(localStorage.getItem('readmd.handoff') || 'null');
+    if (!h || typeof h.text !== 'string') return;
+    localStorage.removeItem('readmd.handoff');
+    const f = { id: uid(), name: ensureExt(h.name || '문서.md'), text: h.text, saved: h.text, scroll: 0 };
+    files.push(f); activeId = f.id;
+  }catch(e){}
+}
 if (SPONSOR_URL){ const sl = $('#sponsorLink'); sl.href = SPONSOR_URL; sl.hidden = false; }
 if (!/Mac|iPhone|iPad/.test(navigator.platform)) document.querySelectorAll('.kbd').forEach(k => k.textContent = k.textContent.replace('⌘⇧','Ctrl+Shift+').replace('⌘','Ctrl+'));
 load();
+takeHandoff();
 setView(view);
 activate(activeId);
 })();
