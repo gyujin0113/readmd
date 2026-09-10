@@ -27,10 +27,10 @@ Claude, ChatGPT 같은 AI가 만들어 주는 `.md` 파일을 VS Code 없이 편
 
 ## 배포
 
-Cloudflare Pages 정적 호스팅입니다.
+Cloudflare Workers 정적 자산(Static Assets) 호스팅입니다.
 
 ```bash
-npx wrangler pages deploy public --project-name readmd
+npx wrangler deploy
 ```
 
 ## 기여

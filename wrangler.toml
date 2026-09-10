@@ -1,3 +1,8 @@
 name = "readmd"
 compatibility_date = "2026-09-01"
-pages_build_output_dir = "public"
+workers_dev = true
+
+[assets]
+directory = "./public"
+html_handling = "auto-trailing-slash"
+not_found_handling = "single-page-application"
