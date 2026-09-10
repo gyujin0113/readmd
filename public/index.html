@@ -1,0 +1,656 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ReadMD - md 파일 뷰어, 마크다운 뷰어</title>
+<meta name="description" content="Claude, ChatGPT가 만들어 준 .md 파일을 설치 없이 브라우저에서 바로 읽고 고치는 무료 마크다운 뷰어. 파일은 서버로 전송되지 않습니다.">
+<meta name="keywords" content="md 파일 뷰어, 마크다운 뷰어, md 파일 열기, markdown viewer, md viewer, 마크다운 편집기, ChatGPT md 파일, 클로드 md 파일">
+<link rel="canonical" href="https://readmd.kr/">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ReadMD">
+<meta property="og:title" content="ReadMD - md 파일을 바로 읽는 마크다운 뷰어">
+<meta property="og:description" content="AI가 만들어 준 .md 파일, 설치 없이 끌어다 놓기만 하세요. 편집·미리보기·저장까지, 파일은 브라우저 밖으로 나가지 않습니다.">
+<meta property="og:url" content="https://readmd.kr/">
+<meta property="og:image" content="https://readmd.kr/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="ko_KR">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="ReadMD - md 파일을 바로 읽는 마크다운 뷰어">
+<meta name="twitter:description" content="AI가 만들어 준 .md 파일, 설치 없이 끌어다 놓기만 하세요. 파일은 브라우저 밖으로 나가지 않습니다.">
+<meta name="twitter:image" content="https://readmd.kr/og.png">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"ReadMD","alternateName":"리드엠디","applicationCategory":"UtilitiesApplication","operatingSystem":"Web","url":"https://readmd.kr/","description":"설치 없이 브라우저에서 .md 파일을 읽고 편집하는 무료 마크다운 뷰어","offers":{"@type":"Offer","price":"0","priceCurrency":"KRW"},"author":{"@type":"Organization","name":"주식회사 쓰리앤디"},"inLanguage":"ko"}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#f3f4f7; --surface:#ffffff; --surface-2:#eaecf1; --line:#d8dbe3; --line-soft:#e6e8ee;
+  --ink:#1b1f27; --ink-2:#4b5262; --ink-3:#7a8194;
+  --accent:#2f56d9; --accent-ink:#ffffff; --accent-soft:#e6ecfb;
+  --code-bg:#f0f2f6; --pre-bg:#f6f7fa; --quote:#c8cdd8;
+  --hl-kw:#a626a4; --hl-str:#50a14f; --hl-num:#986801; --hl-cm:#8a8f9c; --hl-fn:#4078f2; --hl-tag:#e45649; --hl-attr:#986801;
+  --shadow:0 8px 24px rgba(27,31,39,.10);
+  --sans:"IBM Plex Sans KR","Apple SD Gothic Neo","Noto Sans KR",system-ui,sans-serif;
+  --mono:"IBM Plex Mono","SF Mono",Menlo,Consolas,monospace;
+  --editor-w:1fr; --preview-w:1fr;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#121419; --surface:#1a1d24; --surface-2:#22262f; --line:#2e333e; --line-soft:#262a33;
+    --ink:#e7e9ef; --ink-2:#aab0be; --ink-3:#737a8a;
+    --accent:#7d9bff; --accent-ink:#0f1320; --accent-soft:#25304f;
+    --code-bg:#252a34; --pre-bg:#161920; --quote:#3a4150;
+    --hl-kw:#c678dd; --hl-str:#98c379; --hl-num:#d19a66; --hl-cm:#6b7280; --hl-fn:#61afef; --hl-tag:#e06c75; --hl-attr:#d19a66;
+    --shadow:0 8px 24px rgba(0,0,0,.45);
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121419; --surface:#1a1d24; --surface-2:#22262f; --line:#2e333e; --line-soft:#262a33;
+  --ink:#e7e9ef; --ink-2:#aab0be; --ink-3:#737a8a;
+  --accent:#7d9bff; --accent-ink:#0f1320; --accent-soft:#25304f;
+  --code-bg:#252a34; --pre-bg:#161920; --quote:#3a4150;
+  --hl-kw:#c678dd; --hl-str:#98c379; --hl-num:#d19a66; --hl-cm:#6b7280; --hl-fn:#61afef; --hl-tag:#e06c75; --hl-attr:#d19a66;
+  --shadow:0 8px 24px rgba(0,0,0,.45);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:14px;line-height:1.5;overflow:hidden}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+button:focus-visible,[tabindex]:focus-visible,textarea:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+
+/* ---------- app frame ---------- */
+#app{display:grid;grid-template-rows:auto auto 1fr auto;height:100%}
+.topbar{display:flex;align-items:center;gap:8px;padding:6px 10px;background:var(--surface);border-bottom:1px solid var(--line)}
+.brand{color:inherit;text-decoration:none;display:flex;align-items:center;gap:8px;font-weight:700;letter-spacing:-.01em;padding-right:6px;margin-right:2px;border-right:1px solid var(--line)}
+.brand .mark{width:24px;height:22px;border-radius:6px;background:var(--accent);color:var(--accent-ink);display:grid;place-items:center;font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.02em}
+.tools{display:flex;align-items:center;gap:4px;margin-left:auto}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:5px 9px;border-radius:6px;color:var(--ink-2);white-space:nowrap}
+.btn:hover{background:var(--surface-2);color:var(--ink)}
+.btn.primary{background:var(--accent);color:var(--accent-ink)}
+.btn.primary:hover{filter:brightness(1.08)}
+.btn svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.seg{display:inline-flex;background:var(--surface-2);border-radius:7px;padding:2px;gap:2px}
+.seg .btn{padding:4px 8px;border-radius:5px}
+.seg .btn.on{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.12)}
+.kbd{font-family:var(--mono);font-size:10.5px;color:var(--ink-3);background:var(--surface-2);border:1px solid var(--line);border-radius:4px;padding:0 4px}
+
+.tabbar{display:flex;align-items:stretch;background:var(--surface);border-bottom:1px solid var(--line);overflow-x:auto;scrollbar-width:thin;min-height:34px}
+.tab{display:flex;align-items:center;gap:6px;padding:0 8px 0 12px;border-right:1px solid var(--line-soft);color:var(--ink-2);cursor:pointer;user-select:none;position:relative;font-size:13px;max-width:240px}
+.tab:hover{background:var(--surface-2)}
+.tab.on{color:var(--ink);background:var(--bg)}
+.tab.on::after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:2px;background:var(--accent)}
+.tab .name{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tab .dot{width:7px;height:7px;border-radius:50%;background:var(--accent);flex:none;display:none}
+.tab.dirty .dot{display:block}
+.tab .x{width:18px;height:18px;border-radius:4px;display:grid;place-items:center;color:var(--ink-3);flex:none}
+.tab .x:hover{background:var(--line);color:var(--ink)}
+.tab-add{padding:0 12px;color:var(--ink-3);font-size:18px;line-height:1}
+.tab-add:hover{color:var(--ink);background:var(--surface-2)}
+
+.main{display:grid;grid-template-columns:auto var(--editor-w) auto var(--preview-w);min-height:0}
+.main[data-view="editor"]{grid-template-columns:auto 1fr 0 0}
+.main[data-view="preview"]{grid-template-columns:auto 0 0 1fr}
+.main[data-view="editor"] .preview,.main[data-view="editor"] .divider,.main[data-view="preview"] .editor,.main[data-view="preview"] .divider{display:none}
+
+/* ---------- outline ---------- */
+.outline{grid-column:1;width:220px;border-right:1px solid var(--line);background:var(--surface);overflow:auto;padding:12px 6px 24px;scrollbar-width:thin}
+.outline.hidden{display:none}
+.outline h6{margin:0 0 6px 10px;font-size:10.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
+.outline a{display:block;padding:4px 10px;border-radius:5px;color:var(--ink-2);text-decoration:none;font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.outline a:hover{background:var(--surface-2);color:var(--ink)}
+.outline a.l2{padding-left:20px}.outline a.l3{padding-left:30px;color:var(--ink-3)}
+.outline .empty{margin:0 10px;color:var(--ink-3);font-size:12px}
+
+/* ---------- editor ---------- */
+.editor{grid-column:2;display:flex;flex-direction:column;min-width:0;min-height:0;background:var(--surface)}
+.pane-head{display:flex;align-items:center;gap:8px;padding:5px 12px;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);border-bottom:1px solid var(--line-soft);background:var(--surface)}
+.pane-head .sp{margin-left:auto;font-weight:400;letter-spacing:0;text-transform:none;font-family:var(--mono);font-size:11px}
+textarea#src{flex:1;width:100%;resize:none;border:0;padding:20px 24px 50vh;background:var(--surface);color:var(--ink);font-family:var(--mono);font-size:13px;line-height:1.7;tab-size:2;white-space:pre-wrap;word-break:break-word;scrollbar-width:thin}
+textarea#src::placeholder{color:var(--ink-3)}
+
+.divider{grid-column:3;width:6px;cursor:col-resize;background:var(--bg);border-left:1px solid var(--line);border-right:1px solid var(--line);position:relative}
+.divider:hover,.divider.drag{background:var(--accent-soft)}
+
+/* ---------- preview ---------- */
+.preview{grid-column:4;display:flex;flex-direction:column;min-width:0;min-height:0;background:var(--bg)}
+.preview-scroll{flex:1;overflow:auto;position:relative;padding:28px 36px 50vh;scrollbar-width:thin}
+.md{max-width:820px;margin:0 auto;font-size:15.5px;line-height:1.75;color:var(--ink);word-wrap:break-word}
+</style>
+<style id="md-css">
+.md>*:first-child{margin-top:0}
+.md h1,.md h2,.md h3,.md h4,.md h5,.md h6{font-weight:700;line-height:1.3;margin:1.6em 0 .6em;letter-spacing:-.01em;text-wrap:balance;scroll-margin-top:16px}
+.md h1{font-size:2em;padding-bottom:.3em;border-bottom:1px solid var(--line)}
+.md h2{font-size:1.5em;padding-bottom:.25em;border-bottom:1px solid var(--line-soft)}
+.md h3{font-size:1.22em}.md h4{font-size:1.05em}.md h5{font-size:.95em}.md h6{font-size:.9em;color:var(--ink-2)}
+.md p{margin:0 0 1em}
+.md a{color:var(--accent);text-decoration:none}.md a:hover{text-decoration:underline}
+.md strong{font-weight:700}
+.md hr{border:0;border-top:2px solid var(--line);margin:2em 0}
+.md ul,.md ol{padding-left:1.8em;margin:0 0 1em}
+.md li{margin:.25em 0}.md li>p{margin-bottom:.4em}
+.md li.task{list-style:none;margin-left:-1.5em}
+.md li.task input{margin:0 .5em 0 0;vertical-align:-1px;accent-color:var(--accent)}
+.md blockquote{margin:0 0 1em;padding:.4em 1.1em;border-left:4px solid var(--quote);color:var(--ink-2);background:var(--surface)}
+.md blockquote>:last-child{margin-bottom:0}
+.md code{font-family:var(--mono);font-size:.875em;background:var(--code-bg);padding:.15em .4em;border-radius:4px}
+.md pre{background:var(--pre-bg);border:1px solid var(--line-soft);border-radius:8px;padding:14px 16px;overflow:auto;margin:0 0 1.2em;line-height:1.6;position:relative}
+.md pre code{background:none;padding:0;font-size:.85em;white-space:pre}
+.md pre .lang{position:absolute;top:6px;right:10px;font-family:var(--mono);font-size:10.5px;color:var(--ink-3);letter-spacing:.04em}
+.md pre.mermaid{background:var(--surface);text-align:center;padding:18px}
+.md pre.mermaid svg{max-width:100%;height:auto}
+.md table{border-collapse:collapse;margin:0 0 1.2em;display:block;max-width:100%;overflow:auto;font-size:.94em;font-variant-numeric:tabular-nums}
+.md th,.md td{border:1px solid var(--line);padding:.45em .9em;vertical-align:top}
+.md th{background:var(--surface-2);font-weight:600;text-align:left}
+.md tr:nth-child(even) td{background:var(--surface)}
+.md img{max-width:100%;border-radius:6px}
+.md .footnotes{font-size:.9em;color:var(--ink-2);border-top:1px solid var(--line);margin-top:2em;padding-top:1em}
+.md del{color:var(--ink-3)}
+.md kbd{font-family:var(--mono);font-size:.8em;border:1px solid var(--line);border-bottom-width:2px;border-radius:4px;padding:.1em .4em;background:var(--surface)}
+.md details{border:1px solid var(--line);border-radius:8px;padding:.5em 1em;margin:0 0 1em}
+.md summary{cursor:pointer;font-weight:600}
+/* highlight.js token colors via tokens */
+.hljs-keyword,.hljs-selector-tag,.hljs-literal,.hljs-built_in,.hljs-type{color:var(--hl-kw)}
+.hljs-string,.hljs-regexp,.hljs-addition,.hljs-meta .hljs-string{color:var(--hl-str)}
+.hljs-number,.hljs-symbol,.hljs-bullet,.hljs-attr,.hljs-variable,.hljs-template-variable{color:var(--hl-num)}
+.hljs-comment,.hljs-quote,.hljs-deletion{color:var(--hl-cm);font-style:italic}
+.hljs-title,.hljs-title.function_,.hljs-function .hljs-title,.hljs-section{color:var(--hl-fn)}
+.hljs-name,.hljs-tag,.hljs-selector-id,.hljs-selector-class{color:var(--hl-tag)}
+.hljs-attribute,.hljs-meta{color:var(--hl-attr)}
+.hljs-emphasis{font-style:italic}.hljs-strong{font-weight:700}
+</style>
+<style>
+/* ---------- status / overlays ---------- */
+.statusbar{display:flex;align-items:center;gap:16px;padding:4px 12px;background:var(--surface);border-top:1px solid var(--line);font-size:11.5px;color:var(--ink-3);font-family:var(--mono);font-variant-numeric:tabular-nums}
+.statusbar .sp{margin-left:auto}
+.statusbar .link{color:var(--ink-2);text-decoration:none}.statusbar .link:hover{color:var(--accent);text-decoration:underline}
+.statusbar .priv{color:var(--ink-2)}
+.statusbar .hint{font-family:var(--sans)}
+.drop{position:fixed;inset:0;background:color-mix(in srgb,var(--accent) 12%,transparent);backdrop-filter:blur(2px);display:none;place-items:center;z-index:50;pointer-events:none}
+.drop.on{display:grid}
+.drop .box{border:2px dashed var(--accent);border-radius:14px;padding:32px 48px;background:var(--surface);box-shadow:var(--shadow);font-size:18px;font-weight:600;color:var(--accent)}
+.toast{position:fixed;left:50%;bottom:44px;transform:translateX(-50%) translateY(20px);opacity:0;background:var(--ink);color:var(--bg);padding:8px 14px;border-radius:8px;font-size:13px;box-shadow:var(--shadow);transition:.2s;z-index:60;pointer-events:none}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+.empty-state{display:grid;place-items:center;height:100%;color:var(--ink-3);text-align:center;padding:40px}
+.empty-state b{display:block;color:var(--ink-2);font-size:17px;margin-bottom:6px}
+@media (max-width:820px){
+  .outline{display:none !important}
+  .main{grid-template-columns:auto 0 0 1fr}
+  .main .editor,.main .divider{display:none}
+  .main[data-view="editor"]{grid-template-columns:auto 1fr 0 0}
+  .main[data-view="editor"] .editor{display:flex}
+  .main[data-view="editor"] .preview{display:none}
+  .tools .hide-sm{display:none}
+  .statusbar .hint:not(.link){display:none}
+  .preview-scroll{padding:20px 18px 40vh}
+}
+@media (prefers-reduced-motion:reduce){.toast{transition:none}}
+@media print{
+  body{overflow:visible;background:#fff}
+  #app{display:block;height:auto}
+  .topbar,.tabbar,.outline,.editor,.divider,.statusbar,.pane-head,.drop,.toast{display:none !important}
+  .main{display:block}
+  .preview{display:block;background:#fff}
+  .preview-scroll{overflow:visible;padding:0}
+  .md{max-width:none;color:#000}
+}
+</style>
+</head>
+<body>
+<div id="app">
+  <header class="topbar">
+    <a class="brand" href="https://readmd.kr/" title="ReadMD - md 파일 뷰어"><span class="mark">MD</span><span>ReadMD</span></a>
+    <button class="btn" id="btnOpen" title="파일 열기 (⌘O)"><svg viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>열기</button>
+    <button class="btn" id="btnNew" title="새 문서"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>새 문서</button>
+    <button class="btn hide-sm" id="btnOutline" title="목차 보기/숨기기"><svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h10M4 18h13"/></svg>목차</button>
+    <div class="tools">
+      <div class="seg" role="group" aria-label="보기 모드">
+        <button class="btn" data-view="editor" title="편집기만">편집</button>
+        <button class="btn on" data-view="split" title="분할 보기">분할</button>
+        <button class="btn" data-view="preview" title="미리보기만">미리보기</button>
+      </div>
+      <button class="btn" id="btnTheme" title="테마 전환"><svg viewBox="0 0 24 24"><path d="M12 3a9 9 0 1 0 9 9c0-.5 0-1-.1-1.4A5.5 5.5 0 0 1 12 3.1z"/></svg></button>
+      <button class="btn hide-sm" id="btnHtml" title="렌더링된 HTML 파일로 내보내기"><svg viewBox="0 0 24 24"><path d="M8 4l-5 8 5 8M16 4l5 8-5 8"/></svg>HTML</button>
+      <button class="btn hide-sm" id="btnPrint" title="인쇄 / PDF로 저장"><svg viewBox="0 0 24 24"><path d="M6 9V3h12v6M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2M6 14h12v7H6z"/></svg>PDF</button>
+      <button class="btn primary" id="btnSave" title="Markdown 파일로 저장 (⌘S)"><svg viewBox="0 0 24 24"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>.md 저장</button>
+    </div>
+  </header>
+
+  <nav class="tabbar" id="tabbar" aria-label="열린 문서"></nav>
+
+  <div class="main" id="main" data-view="split">
+    <aside class="outline" id="outline"><h6>목차</h6><div id="toc"></div></aside>
+    <section class="editor">
+      <div class="pane-head">원문 <span class="sp" id="cursorPos"></span></div>
+      <textarea id="src" spellcheck="false" placeholder="여기에 Markdown을 붙여넣거나, 창 아무 곳에나 .md 파일을 끌어다 놓으세요."></textarea>
+    </section>
+    <div class="divider" id="divider" title="드래그해서 폭 조절, 더블클릭으로 초기화"></div>
+    <section class="preview">
+      <div class="pane-head">미리보기 <span class="sp" id="fileLabel"></span></div>
+      <div class="preview-scroll" id="previewScroll"><article class="md" id="md"></article></div>
+    </section>
+  </div>
+
+  <footer class="statusbar">
+    <span id="stat"></span>
+    <span class="hint priv" title="파일은 브라우저 안에서만 처리되며, 어떤 서버로도 전송되지 않습니다.">🔒 서버 전송 없음</span>
+    <span class="sp hint"><span class="kbd">⌘S</span> 저장 &nbsp; <span class="kbd">⌘O</span> 열기 &nbsp; <span class="kbd">⌘⇧P</span> 보기 전환</span>
+    <a class="hint link" href="https://github.com/gyujin0113/readmd" target="_blank" rel="noopener">GitHub</a>
+    <a class="hint link" id="sponsorLink" href="#" target="_blank" rel="noopener" hidden>후원하기</a>
+  </footer>
+</div>
+
+<div class="drop" id="drop"><div class="box">여기에 놓으면 열립니다</div></div>
+<div class="toast" id="toast"></div>
+<input type="file" id="fileInput" accept=".md,.markdown,.mdx,.txt,text/markdown,text/plain" multiple hidden>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.1.6/purify.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>
+(function(){
+'use strict';
+const $ = s => document.querySelector(s);
+const src = $('#src'), md = $('#md'), previewScroll = $('#previewScroll'), tabbar = $('#tabbar'),
+      toc = $('#toc'), outline = $('#outline'), main = $('#main'), stat = $('#stat'), fileLabel = $('#fileLabel'),
+      drop = $('#drop'), toast = $('#toast'), fileInput = $('#fileInput'), divider = $('#divider'), cursorPos = $('#cursorPos');
+
+const STORE = 'readmd.v1';
+const SPONSOR_URL = ''; // 예: https://buymeacoffee.com/readmd — 비워 두면 버튼이 숨겨집니다
+const SAMPLE_NAME = 'ReadMD 시작하기.md';
+const SAMPLE = `# ReadMD에 오신 것을 환영합니다
+
+Claude나 ChatGPT가 만들어 준 \`.md\` 파일을 **설치 없이, VS Code 없이** 바로 읽고 고치는 무료 도구입니다.
+이 문서는 예시입니다. 왼쪽 원문을 고쳐 보면 오른쪽이 바로 바뀝니다.
+
+> 🔒 올린 파일은 **브라우저 안에서만** 처리됩니다. 어떤 서버로도 전송되지 않으니 회사 문서도 안심하고 여세요.
+
+## 사용법
+
+1. 창 아무 곳에나 \`.md\` 파일을 **끌어다 놓으세요**. 여러 개도 됩니다.
+2. 왼쪽에서 고치고, 오른쪽에서 확인합니다.
+3. \`⌘S\`(Windows는 \`Ctrl+S\`)로 \`.md\` 파일을 다시 저장합니다.
+
+> 열어 둔 파일과 수정 내용은 이 브라우저에 자동 보관되어, 새로고침해도 사라지지 않습니다.
+> 여러 개를 한 번에 열면 위쪽 탭으로 오갈 수 있습니다.
+
+## 지원하는 문법
+
+- [x] 표, 체크리스트, 각주 같은 GitHub 확장 문법
+- [x] 코드 하이라이트
+- [x] Mermaid 다이어그램
+- [ ] 수식(KaTeX)은 아직 지원하지 않습니다
+
+### 표
+
+| 기능 | 단축키 | 비고 |
+|---|---|---|
+| 저장 | ⌘S | .md 파일로 내려받기 |
+| 열기 | ⌘O | 여러 파일 선택 가능 |
+| 보기 전환 | ⌘⇧P | 편집 → 분할 → 미리보기 |
+
+### 코드
+
+\`\`\`js
+async function loadMarkdown(file) {
+  const text = await file.text();
+  return marked.parse(text); // 렌더링 결과
+}
+\`\`\`
+
+### 다이어그램
+
+\`\`\`mermaid
+flowchart LR
+  A[.md 파일] -->|드래그| B(ReadMD)
+  B --> C{보기}
+  C --> D[편집기]
+  C --> E[미리보기]
+\`\`\`
+
+## 팁
+
+- 목차 버튼을 누르면 왼쪽에 제목 목록이 나타납니다. 긴 문서에서 유용합니다.
+- **HTML** 버튼은 렌더링된 결과를 단일 HTML 파일로 내보냅니다. 메일이나 카톡으로 보내기 좋습니다.
+- **PDF** 버튼은 브라우저 인쇄 화면을 엽니다. "PDF로 저장"을 고르면 됩니다.
+- 오픈소스입니다. 불편한 점이나 아이디어는 [GitHub](https://github.com/gyujin0113/readmd)에 남겨 주세요.
+`;
+
+/* ---------- state ---------- */
+let files = [], activeId = null, view = 'split', renderTimer = null;
+const uid = () => Math.random().toString(36).slice(2, 10);
+const active = () => files.find(f => f.id === activeId);
+
+function load(){
+  try{
+    const s = JSON.parse(localStorage.getItem(STORE) || 'null');
+    if (s && Array.isArray(s.files) && s.files.length){
+      files = s.files; activeId = s.activeId; view = s.view || 'split';
+      if (!files.some(f => f.id === activeId)) activeId = files[0].id;
+      if (s.split) document.documentElement.style.setProperty('--editor-w', s.split[0]), document.documentElement.style.setProperty('--preview-w', s.split[1]);
+      if (s.outline === false) outline.classList.add('hidden');
+      return;
+    }
+  }catch(e){}
+  files = [{ id: uid(), name: SAMPLE_NAME, text: SAMPLE, saved: SAMPLE, scroll: 0 }];
+  activeId = files[0].id;
+}
+let saveTimer = null;
+function persist(){
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(() => {
+    try{
+      localStorage.setItem(STORE, JSON.stringify({
+        files, activeId, view,
+        split: [getComputedStyle(document.documentElement).getPropertyValue('--editor-w').trim(), getComputedStyle(document.documentElement).getPropertyValue('--preview-w').trim()],
+        outline: !outline.classList.contains('hidden')
+      }));
+    }catch(e){ /* 용량 초과 등: 조용히 무시 */ }
+  }, 300);
+}
+
+/* ---------- theme ---------- */
+function applyTheme(t){
+  if (t) document.documentElement.setAttribute('data-theme', t); else document.documentElement.removeAttribute('data-theme');
+  try{ t ? localStorage.setItem('readmd.theme', t) : localStorage.removeItem('readmd.theme'); }catch(e){}
+}
+function isDark(){
+  const t = document.documentElement.getAttribute('data-theme');
+  return t ? t === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
+}
+try{ const t = localStorage.getItem('readmd.theme'); if (t) applyTheme(t); }catch(e){}
+$('#btnTheme').addEventListener('click', () => { applyTheme(isDark() ? 'light' : 'dark'); render(true); });
+
+/* ---------- markdown rendering ---------- */
+const esc = s => s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let slugCounts = {};
+function slug(raw){
+  let s = raw.replace(/<[^>]+>/g,'').trim().toLowerCase().replace(/[^\p{L}\p{N}\s-]/gu,'').replace(/\s+/g,'-') || 'section';
+  const n = (slugCounts[s] = (slugCounts[s] || 0) + 1);
+  return n > 1 ? `${s}-${n}` : s;
+}
+const renderer = {
+  heading(text, level, raw){ return `<h${level} id="${slug(raw)}">${text}</h${level}>\n`; },
+  code(code, info){
+    const lang = (info || '').trim().split(/\s+/)[0].toLowerCase();
+    if (lang === 'mermaid') return `<pre class="mermaid">${esc(code)}</pre>\n`;
+    const cls = lang ? ` class="language-${esc(lang)}"` : '';
+    const label = lang ? `<span class="lang">${esc(lang)}</span>` : '';
+    return `<pre>${label}<code${cls}>${esc(code)}</code></pre>\n`;
+  },
+  listitem(text, task, checked){
+    if (task) return `<li class="task"><input type="checkbox" disabled${checked ? ' checked' : ''}> ${text.replace(/^<input[^>]*>\s*/,'')}</li>\n`;
+    return `<li>${text}</li>\n`;
+  }
+};
+marked.use({ gfm: true, breaks: false, renderer });
+
+let mermaidPromise = null;
+function ensureMermaid(){
+  if (window.mermaid) return Promise.resolve(window.mermaid);
+  if (mermaidPromise) return mermaidPromise;
+  mermaidPromise = new Promise((res, rej) => {
+    const s = document.createElement('script');
+    s.src = 'https://cdnjs.cloudflare.com/ajax/libs/mermaid/10.9.1/mermaid.min.js';
+    s.onload = () => res(window.mermaid); s.onerror = () => rej(new Error('mermaid load failed'));
+    document.head.appendChild(s);
+  });
+  return mermaidPromise;
+}
+
+let renderSeq = 0;
+function render(force){
+  const f = active();
+  slugCounts = {};
+  if (!f){ md.innerHTML = '<div class="empty-state"><div><b>열린 문서가 없습니다</b>.md 파일을 이 창에 끌어다 놓거나, 위의 “열기” 버튼을 누르세요.</div></div>'; toc.innerHTML = ''; updateStat(); return; }
+  const html = DOMPurify.sanitize(marked.parse(f.text), { ADD_ATTR: ['id'] });
+  md.innerHTML = html;
+  md.querySelectorAll('pre code[class^="language-"]').forEach(el => {
+    const lang = el.className.replace('language-','');
+    if (hljs.getLanguage(lang)) hljs.highlightElement(el);
+  });
+  const diagrams = md.querySelectorAll('pre.mermaid');
+  if (diagrams.length){
+    const seq = ++renderSeq;
+    diagrams.forEach(d => d.dataset.src = d.textContent);
+    ensureMermaid().then(m => {
+      if (seq !== renderSeq) return;
+      m.initialize({ startOnLoad: false, theme: isDark() ? 'dark' : 'default', securityLevel: 'strict', fontFamily: 'IBM Plex Sans KR, sans-serif' });
+      return m.run({ nodes: diagrams });
+    }).catch(err => {
+      diagrams.forEach(d => { if (!d.querySelector('svg')) d.innerHTML = `<code style="color:var(--hl-tag)">다이어그램 오류: ${esc(String(err.message || err))}</code>`; });
+    });
+  }
+  buildToc();
+  updateStat();
+}
+function buildToc(){
+  const hs = md.querySelectorAll('h1,h2,h3');
+  if (!hs.length){ toc.innerHTML = '<p class="empty">제목(#)이 없는 문서입니다.</p>'; return; }
+  toc.innerHTML = Array.from(hs).map(h => `<a href="#${h.id}" class="l${h.tagName[1]}" data-id="${h.id}">${esc(h.textContent)}</a>`).join('');
+}
+toc.addEventListener('click', e => {
+  const a = e.target.closest('a'); if (!a) return;
+  e.preventDefault();
+  const h = document.getElementById(a.dataset.id);
+  if (h){ previewScroll.scrollTo({ top: h.offsetTop - 12, behavior: 'smooth' }); }
+});
+md.addEventListener('click', e => {
+  const a = e.target.closest('a[href^="#"]'); if (!a) return;
+  const h = document.getElementById(decodeURIComponent(a.getAttribute('href').slice(1)));
+  if (h){ e.preventDefault(); previewScroll.scrollTo({ top: h.offsetTop - 12, behavior: 'smooth' }); }
+});
+
+function scheduleRender(){ clearTimeout(renderTimer); renderTimer = setTimeout(() => render(), 120); }
+
+/* ---------- tabs ---------- */
+function renderTabs(){
+  tabbar.innerHTML = files.map(f => `
+    <div class="tab${f.id === activeId ? ' on' : ''}${f.text !== f.saved ? ' dirty' : ''}" data-id="${f.id}" title="${esc(f.name)} (더블클릭: 이름 바꾸기)" tabindex="0">
+      <span class="name">${esc(f.name)}</span><span class="dot"></span>
+      <button class="x" data-close="${f.id}" title="닫기" aria-label="${esc(f.name)} 닫기">×</button>
+    </div>`).join('') + `<button class="tab-add" id="tabAdd" title="새 문서">+</button>`;
+  const f = active();
+  fileLabel.textContent = f ? f.name : '';
+}
+tabbar.addEventListener('click', e => {
+  const x = e.target.closest('[data-close]');
+  if (x){ closeFile(x.dataset.close); return; }
+  if (e.target.closest('#tabAdd')){ newFile(); return; }
+  const t = e.target.closest('.tab'); if (t) activate(t.dataset.id);
+});
+tabbar.addEventListener('dblclick', e => {
+  const t = e.target.closest('.tab'); if (!t || e.target.closest('.x')) return;
+  const f = files.find(x => x.id === t.dataset.id);
+  const name = prompt('파일 이름', f.name);
+  if (name && name.trim()){ f.name = ensureExt(name.trim()); renderTabs(); persist(); }
+});
+tabbar.addEventListener('keydown', e => { if (e.key === 'Enter' && e.target.classList.contains('tab')) activate(e.target.dataset.id); });
+function ensureExt(n){ return /\.(md|markdown|mdx|txt)$/i.test(n) ? n : n + '.md'; }
+
+function activate(id){
+  const prev = active(); if (prev) prev.scroll = src.scrollTop;
+  activeId = id;
+  const f = active();
+  src.value = f ? f.text : '';
+  renderTabs(); render();
+  requestAnimationFrame(() => { src.scrollTop = f ? f.scroll || 0 : 0; syncFromEditor(); });
+  persist();
+}
+function addFile(name, text, makeActive){
+  const f = { id: uid(), name: ensureExt(name || '제목 없음'), text, saved: text, scroll: 0 };
+  files.push(f);
+  if (makeActive !== false) activate(f.id); else { renderTabs(); persist(); }
+  return f;
+}
+function newFile(){
+  let n = 1; while (files.some(f => f.name === `제목 없음${n > 1 ? ' ' + n : ''}.md`)) n++;
+  addFile(`제목 없음${n > 1 ? ' ' + n : ''}.md`, '', true);
+  src.focus();
+}
+function closeFile(id){
+  const f = files.find(x => x.id === id); if (!f) return;
+  if (f.text !== f.saved && !confirm(`"${f.name}"에 저장하지 않은 변경이 있습니다. 그래도 닫을까요?`)) return;
+  const i = files.indexOf(f); files.splice(i, 1);
+  if (activeId === id){
+    if (files.length) activate(files[Math.max(0, i - 1)].id);
+    else { activeId = null; src.value = ''; renderTabs(); render(); }
+  } else { renderTabs(); }
+  persist();
+}
+
+/* ---------- editing ---------- */
+src.addEventListener('input', () => {
+  const f = active();
+  if (!f){ addFile('제목 없음.md', src.value, false); activeId = files[files.length - 1].id; renderTabs(); }
+  else f.text = src.value;
+  scheduleRender(); renderTabs(); persist();
+});
+src.addEventListener('keydown', e => {
+  if (e.key === 'Tab'){
+    e.preventDefault();
+    const s = src.selectionStart, t = src.selectionEnd;
+    src.setRangeText('  ', s, t, 'end');
+    src.dispatchEvent(new Event('input'));
+  }
+});
+['keyup','click','input'].forEach(ev => src.addEventListener(ev, () => {
+  const before = src.value.slice(0, src.selectionStart);
+  const line = before.split('\n').length, col = before.length - before.lastIndexOf('\n');
+  cursorPos.textContent = `${line}:${col}`;
+}));
+
+function updateStat(){
+  const f = active();
+  if (!f){ stat.textContent = ''; return; }
+  const t = f.text, chars = t.length, words = (t.match(/[\p{L}\p{N}_]+/gu) || []).length, lines = t.split('\n').length;
+  const mins = Math.max(1, Math.round(words / 300));
+  stat.textContent = `${chars.toLocaleString()}자 · ${words.toLocaleString()}단어 · ${lines.toLocaleString()}줄 · 약 ${mins}분`;
+}
+
+/* ---------- scroll sync ---------- */
+function ratio(el){ const m = el.scrollHeight - el.clientHeight; return m > 0 ? el.scrollTop / m : 0; }
+function setRatio(el, r){ el.scrollTop = r * (el.scrollHeight - el.clientHeight); }
+let driver = 'editor';
+function syncFromEditor(){ setRatio(previewScroll, ratio(src)); }
+function syncFromPreview(){ setRatio(src, ratio(previewScroll)); }
+src.addEventListener('mouseenter', () => driver = 'editor');
+src.addEventListener('focus', () => driver = 'editor');
+previewScroll.addEventListener('mouseenter', () => driver = 'preview');
+src.addEventListener('scroll', () => { if (driver === 'editor') syncFromEditor(); }, { passive: true });
+previewScroll.addEventListener('scroll', () => { if (driver === 'preview') syncFromPreview(); }, { passive: true });
+
+/* ---------- view mode ---------- */
+function setView(v){
+  view = v; main.dataset.view = v;
+  document.querySelectorAll('.seg .btn').forEach(b => b.classList.toggle('on', b.dataset.view === v));
+  persist();
+}
+document.querySelectorAll('.seg .btn').forEach(b => b.addEventListener('click', () => setView(b.dataset.view)));
+$('#btnOutline').addEventListener('click', () => { outline.classList.toggle('hidden'); persist(); });
+
+/* ---------- divider ---------- */
+(function(){
+  let dragging = false;
+  divider.addEventListener('mousedown', e => { dragging = true; divider.classList.add('drag'); e.preventDefault(); });
+  window.addEventListener('mousemove', e => {
+    if (!dragging) return;
+    const r = main.getBoundingClientRect(), left = outline.classList.contains('hidden') ? 0 : outline.offsetWidth;
+    const x = e.clientX - r.left - left, w = r.width - left - divider.offsetWidth;
+    const p = Math.min(0.8, Math.max(0.2, x / w));
+    document.documentElement.style.setProperty('--editor-w', `${p}fr`);
+    document.documentElement.style.setProperty('--preview-w', `${1 - p}fr`);
+  });
+  window.addEventListener('mouseup', () => { if (dragging){ dragging = false; divider.classList.remove('drag'); persist(); } });
+  divider.addEventListener('dblclick', () => { document.documentElement.style.setProperty('--editor-w','1fr'); document.documentElement.style.setProperty('--preview-w','1fr'); persist(); });
+})();
+
+/* ---------- open files ---------- */
+const OK_EXT = /\.(md|markdown|mdx|txt)$/i;
+async function openFiles(list){
+  const arr = Array.from(list).filter(f => OK_EXT.test(f.name) || /^text\//.test(f.type));
+  if (!arr.length){ showToast('.md, .markdown, .txt 파일만 열 수 있습니다.'); return; }
+  let last = null;
+  for (const file of arr){
+    const text = await file.text();
+    const existing = files.find(x => x.name === file.name && x.text === x.saved);
+    if (existing){ existing.text = existing.saved = text; last = existing; }
+    else last = addFile(file.name, text, false);
+  }
+  if (last) activate(last.id);
+  showToast(arr.length > 1 ? `${arr.length}개 파일을 열었습니다.` : `${arr[0].name} 열림`);
+}
+$('#btnOpen').addEventListener('click', () => fileInput.click());
+$('#btnNew').addEventListener('click', newFile);
+fileInput.addEventListener('change', () => { openFiles(fileInput.files); fileInput.value = ''; });
+
+let dragDepth = 0;
+window.addEventListener('dragenter', e => { if (e.dataTransfer && Array.from(e.dataTransfer.types).includes('Files')){ dragDepth++; drop.classList.add('on'); } });
+window.addEventListener('dragleave', () => { if (--dragDepth <= 0){ dragDepth = 0; drop.classList.remove('on'); } });
+window.addEventListener('dragover', e => e.preventDefault());
+window.addEventListener('drop', e => {
+  e.preventDefault(); dragDepth = 0; drop.classList.remove('on');
+  if (e.dataTransfer.files.length) openFiles(e.dataTransfer.files);
+});
+
+/* ---------- save / export ---------- */
+async function saveBlob(filename, data){
+  if (window.claude && typeof window.claude.use === 'function'){
+    const dl = await window.claude.use('downloads');
+    if (dl){
+      try{ await dl.save({ filename, data }); return true; }
+      catch(err){ if (err && err.code === 'declined') return false; showToast('저장할 수 없습니다: ' + (err.message || err.code || err)); return false; }
+    }
+  }
+  const blob = data instanceof Blob ? data : new Blob([data], { type: 'text/plain;charset=utf-8' });
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = filename;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+  return true;
+}
+async function saveMd(){
+  const f = active(); if (!f){ showToast('저장할 문서가 없습니다.'); return; }
+  if (await saveBlob(f.name, f.text)){ f.saved = f.text; renderTabs(); persist(); showToast(`${f.name} 저장됨`); }
+}
+async function exportHtml(){
+  const f = active(); if (!f){ showToast('내보낼 문서가 없습니다.'); return; }
+  const css = document.getElementById('md-css').textContent;
+  const vars = getComputedStyle(document.documentElement);
+  const tok = ['--line','--line-soft','--ink','--ink-2','--ink-3','--accent','--code-bg','--pre-bg','--quote','--surface','--surface-2','--hl-kw','--hl-str','--hl-num','--hl-cm','--hl-fn','--hl-tag','--hl-attr','--sans','--mono']
+    .map(v => `${v}:${vars.getPropertyValue(v).trim()};`).join('');
+  const doc = `<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(f.name.replace(/\.[^.]+$/,''))}</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>:root{${tok}--bg:${vars.getPropertyValue('--bg').trim()};}body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans)}.md{max-width:820px;margin:0 auto;padding:40px 24px 80px;font-size:15.5px;line-height:1.75;word-wrap:break-word}${css}</style></head>
+<body><article class="md">${md.innerHTML}</article></body></html>`;
+  if (await saveBlob(f.name.replace(/\.[^.]+$/,'') + '.html', doc)) showToast('HTML로 내보냈습니다.');
+}
+$('#btnSave').addEventListener('click', saveMd);
+$('#btnHtml').addEventListener('click', exportHtml);
+$('#btnPrint').addEventListener('click', () => window.print());
+
+window.addEventListener('keydown', e => {
+  const mod = e.metaKey || e.ctrlKey;
+  if (!mod) return;
+  if (e.key === 's' || e.key === 'S'){ e.preventDefault(); saveMd(); }
+  else if (e.key === 'o' || e.key === 'O'){ e.preventDefault(); fileInput.click(); }
+  else if (e.shiftKey && (e.key === 'p' || e.key === 'P')){ e.preventDefault(); setView(view === 'editor' ? 'split' : view === 'split' ? 'preview' : 'editor'); }
+});
+
+/* ---------- toast ---------- */
+let toastTimer = null;
+function showToast(msg){ toast.textContent = msg; toast.classList.add('on'); clearTimeout(toastTimer); toastTimer = setTimeout(() => toast.classList.remove('on'), 2200); }
+
+/* ---------- boot ---------- */
+if (SPONSOR_URL){ const sl = $('#sponsorLink'); sl.href = SPONSOR_URL; sl.hidden = false; }
+if (!/Mac|iPhone|iPad/.test(navigator.platform)) document.querySelectorAll('.kbd').forEach(k => k.textContent = k.textContent.replace('⌘⇧','Ctrl+Shift+').replace('⌘','Ctrl+'));
+load();
+setView(view);
+activate(activeId);
+})();
+</script>
+</body>
+</html>
