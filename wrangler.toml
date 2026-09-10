@@ -7,8 +7,7 @@ directory = "./public"
 html_handling = "auto-trailing-slash"
 not_found_handling = "single-page-application"
 
-# readmd.kr 존이 Cloudflare에 추가되면 아래 주석을 풀고 `npx wrangler deploy`
-# routes = [
-#   { pattern = "readmd.kr", custom_domain = true },
-#   { pattern = "www.readmd.kr", custom_domain = true },
-# ]
+routes = [
+  { pattern = "readmd.kr", custom_domain = true },
+  { pattern = "www.readmd.kr", custom_domain = true },
+]
