@@ -11,7 +11,7 @@ routes = [
 [assets]
 directory = "./public"
 binding = "ASSETS"
-run_worker_first = true
+run_worker_first = ["/", "/md-viewer", "/md-file", "/md-to-pdf", "/chatgpt-md"]
 html_handling = "auto-trailing-slash"
 not_found_handling = "none"
 
