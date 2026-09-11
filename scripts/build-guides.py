@@ -146,6 +146,7 @@ def page(p):
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{html.escape(p["title"])}</title>
 <meta name="description" content="{html.escape(p["desc"])}">
+<meta name="google-site-verification" content="ofm_1Xpid0xdl-DwkD3zj9kp9B05kn_ab-GNRcGFFjQ">
 <link rel="canonical" href="https://readmd.kr/{p["slug"]}">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <meta property="og:type" content="article">
