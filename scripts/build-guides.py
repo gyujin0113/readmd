@@ -147,6 +147,7 @@ def page(p):
 <title>{html.escape(p["title"])}</title>
 <meta name="description" content="{html.escape(p["desc"])}">
 <meta name="google-site-verification" content="ofm_1Xpid0xdl-DwkD3zj9kp9B05kn_ab-GNRcGFFjQ">
+<meta name="naver-site-verification" content="bf584c185572cbb2433ce4e298265de935ff83cd">
 <link rel="canonical" href="https://readmd.kr/{p["slug"]}">
 <link rel="icon" href="/favicon.svg" type="image/svg+xml">
 <meta property="og:type" content="article">
