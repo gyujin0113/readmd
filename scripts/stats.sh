@@ -3,7 +3,7 @@
 set -e
 cd "$(dirname "$0")/.."
 DAYS=${1:-7}
-Q() { npx -y wrangler@4 d1 execute readmd-stats --remote --json --command "$1" | python3 -c "import sys,json; r=json.load(sys.stdin)[0]['results']; print('\n'.join(' | '.join(str(v) for v in row.values()) for row in r) or '(없음)')"; }
+Q() { npx -y wrangler@4 d1 execute readmd-stats --remote --json --command "$1" 2>/dev/null | python3 -c "import sys,json; d=json.load(sys.stdin); r=d[0]['results'] if isinstance(d,list) else d.get('result',[{}])[0].get('results',[]); print('\n'.join(' | '.join(str(v) for v in row.values()) for row in r) or '(없음)')"; }
 echo "== 최근 ${DAYS}일 일별: 날짜 | 페이지뷰 | 방문자 =="
 Q "SELECT day, COUNT(*) AS views, COUNT(DISTINCT visitor) AS visitors FROM pageviews WHERE day >= date('now','+9 hours','-${DAYS} days') GROUP BY day ORDER BY day DESC"
 echo; echo "== 유입 출처 (상위 10) =="

@@ -1,5 +1,6 @@
 // http → https, www → apex 강제 전환 + HSTS, 그리고 D1에 익명 방문 기록.
 // 나머지는 정적 자산(public/) 그대로 서빙.
+const PAGES = new Set(['/', '/md-viewer', '/md-file', '/md-to-pdf', '/chatgpt-md']);
 const BOT_RE = /bot|crawl|spider|slurp|curl|wget|python|httpclient|headless|lighthouse|preview|facebookexternalhit|kakaotalk-scrap|monitor/i;
 
 export default {
@@ -22,6 +23,7 @@ export default {
 
 function shouldLog(request, res, url) {
   if (request.method !== 'GET' || res.status !== 200 || !env_ok(url)) return false;
+  if (!PAGES.has(url.pathname)) return false;
   const accept = request.headers.get('accept') || '';
   if (!accept.includes('text/html')) return false;
   const ua = request.headers.get('user-agent') || '';
