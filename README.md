@@ -46,6 +46,8 @@ npx wrangler deploy
 외부 분석 스크립트 없이, Worker가 HTML 요청마다 D1(`readmd-stats`)에 익명 기록을 남깁니다.
 저장하는 것: 시각, 경로, 유입 출처 도메인, 국가, 기기 종류, 날짜별 익명 해시(IP·UA·날짜를 해시한 값, 원본 저장 안 함). 쿠키를 쓰지 않습니다.
 
+신규/재방문은 브라우저 localStorage에 **마지막 방문 날짜 하나**(`readmd.lastVisit`)만 기억해, 하루 한 번 `/api/v`로 "전에 온 적 있는지·이번 주 첫 방문인지·며칠 만인지"를 보냅니다(`public/v.js`). 사람을 구별하는 ID는 만들지 않습니다. 테이블: `visits` (`migrations/0002_visits.sql`).
+
 ```bash
 scripts/stats.sh        # 최근 7일
 scripts/stats.sh 30     # 최근 30일

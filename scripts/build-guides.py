@@ -181,6 +181,7 @@ def page(p):
 </main>
 <footer>© 2026 ReadMD · 주식회사 쓰리앤디 · MIT 오픈소스</footer>
 <script>{JS}</script>
+<script src="/v.js" defer></script>
 </body>
 </html>
 """
