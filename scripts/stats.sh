@@ -5,7 +5,15 @@ cd "$(dirname "$0")/.."
 DAYS=${1:-7}
 # 워커 필터 도입(2026-09-11) 이전에 남은 비정상 경로·중복 행은 조회 단계에서 제외
 PAGES="'/','/md-viewer','/md-file','/md-to-pdf','/chatgpt-md'"
-V="WITH v AS (SELECT a.* FROM pageviews a WHERE a.path IN ($PAGES) AND NOT EXISTS (SELECT 1 FROM pageviews b WHERE b.id<a.id AND b.visitor=a.visitor AND b.path=a.path AND (julianday(a.ts)-julianday(b.ts))*86400 < 30))"
+# 중복 제거는 윈도 함수(LAG)로 O(n). 이전 상관 서브쿼리(NOT EXISTS)는 행마다 전체 스캔 → 행수² 읽기라
+# 테이블 5천 행에서 쿼리당 2,500만 행을 읽어 D1 무료 한도(일 500만)를 한 번 실행에 초과했다(2026-11-05).
+# visitor 해시는 날짜별이라 파티션이 날짜를 넘지 않으므로, 날짜 필터를 중복 제거 전에 거는 것이 안전하다.
+CUTOFF="date('now','+9 hours','-${DAYS} days')"
+vq() { # $1 = 추가 WHERE 조건 (없으면 전체)
+  echo "WITH p AS (SELECT a.*, LAG(ts) OVER (PARTITION BY visitor, path ORDER BY id) AS prev_ts FROM pageviews a WHERE a.path IN ($PAGES)${1:+ AND $1}), v AS (SELECT * FROM p WHERE prev_ts IS NULL OR (julianday(ts)-julianday(prev_ts))*86400 >= 30)"
+}
+V=$(vq "a.day >= $CUTOFF")
+V_ALL=$(vq)
 # API 오류를 "(없음)"으로 삼키지 않도록: 실패 시 최대 3회 재시도 후 오류 메시지 출력
 RETRIES=3
 FMT="import sys,json
@@ -42,4 +50,4 @@ Q "SELECT date(day, '-' || ((CAST(strftime('%w', day) AS INTEGER) + 6) % 7) || '
 echo; echo "== 재방문 간격: 며칠 만에 | 횟수 =="
 Q "SELECT CASE WHEN gap_days=1 THEN '1일(연속)' WHEN gap_days<=7 THEN '2~7일' WHEN gap_days<=30 THEN '8~30일' ELSE '31일+' END AS g, COUNT(*) FROM visits WHERE is_return=1 AND day >= date('now','+9 hours','-${DAYS} days') GROUP BY g ORDER BY MIN(gap_days)"
 echo; echo "== 누적 =="
-Q "$V SELECT COUNT(*) AS total_views, COUNT(DISTINCT visitor||day) AS total_visitor_days, MIN(day) AS since FROM v"
+Q "$V_ALL SELECT COUNT(*) AS total_views, COUNT(DISTINCT visitor||day) AS total_visitor_days, MIN(day) AS since FROM v"
