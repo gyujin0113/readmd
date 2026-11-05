@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <!-- 일회성: 2026-11-06 09:10 KST에 d1-migrate-remote.sh 실행 후 스스로 등록 해제. 맥이 잠자기 중이면 깨어날 때 실행됨. -->
+  <key>Label</key><string>com.3andd.readmd-d1-migrate-once</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/bash</string>
+    <string>-c</string>
+    <string>/Users/gyujin/주식회사쓰리앤디/readmd/scripts/d1-migrate-remote.sh; launchctl bootout gui/$(id -u)/com.3andd.readmd-d1-migrate-once; rm -f ~/Library/LaunchAgents/com.3andd.readmd-d1-migrate-once.plist</string>
+  </array>
+  <key>StartCalendarInterval</key>
+  <dict><key>Month</key><integer>11</integer><key>Day</key><integer>6</integer><key>Hour</key><integer>9</integer><key>Minute</key><integer>10</integer></dict>
+  <key>EnvironmentVariables</key>
+  <dict><key>PATH</key><string>/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin</string><key>HOME</key><string>/Users/gyujin</string></dict>
+  <key>StandardOutPath</key><string>/Users/gyujin/Library/Logs/readmd-d1-migrate.log</string>
+  <key>StandardErrorPath</key><string>/Users/gyujin/Library/Logs/readmd-d1-migrate.log</string>
+</dict>
+</plist>
